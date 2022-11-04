@@ -6,7 +6,7 @@
 /*   By: aelkhali <aelkhali@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 09:56:13 by aelkhali          #+#    #+#             */
-/*   Updated: 2022/11/04 13:29:00 by aelkhali         ###   ########.fr       */
+/*   Updated: 2022/11/04 14:21:38 by aelkhali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@ char	*re_n_store(int fd)
 
 	i_read = 1;
 	save = NULL;
-	buf = malloc(BUFFER_SIZE + 1);
+	buf = malloc(sizeof(char ) * BUFFER_SIZE + 1);
 	if (!buf)
 		return (NULL);
-	while (!ft_strchr(save, '\n') && i_read != 0)
+	while (i_read != 0 && !ft_strchr(save, '\n'))
 	{
 		i_read = (int )read(fd, buf, BUFFER_SIZE);
 		if (i_read == -1)
@@ -45,13 +45,13 @@ char	*extract_line(char *sv)
 	char	*tmp;
 	size_t	line_len;
 
-	if (!ft_strchr(sv, '\n'))
-		return(sv);
-	line_len = ft_strlen(sv) - ft_strlen(ft_strchr(sv, '\n'));
-	extracted_line = malloc(line_len + 1);
-	if (!extracted_line)
+	if (!*sv)
+	{
+		free(sv);
 		return (NULL);
-	ft_strlcpy(extracted_line, sv, line_len + 1);
+	}
+	line_len = ft_strlen(sv) - ft_strlen(ft_strchr(sv, '\n'));
+	extracted_line = ft_substr(sv, 0, line_len + 1);
 	tmp = ft_substr(sv, line_len + 1, ft_strlen(ft_strchr(sv, '\n')));
 	free(sv);
 	sv = tmp;

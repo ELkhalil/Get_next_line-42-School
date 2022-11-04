@@ -6,7 +6,7 @@
 /*   By: aelkhali <aelkhali@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 09:51:11 by aelkhali          #+#    #+#             */
-/*   Updated: 2022/11/04 13:07:02 by aelkhali         ###   ########.fr       */
+/*   Updated: 2022/11/04 14:10:27 by aelkhali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 
 
 #ifndef BUFFER_SIZE
-# define BUFFER_SIZE 5
+# define BUFFER_SIZE 1
 #endif
 
 char	*get_next_line(int fd);

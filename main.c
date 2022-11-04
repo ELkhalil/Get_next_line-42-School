@@ -7,8 +7,7 @@ int main(void)
     char    *line;
 
     fd = open("text.txt", O_RDWR);
-    line = get_next_line(fd);
-    printf("%s\n",line);
-    free(line);
+    printf("%s\n", get_next_line(fd));
+    printf("%s\n",get_next_line(fd));
     return (0);
 }
