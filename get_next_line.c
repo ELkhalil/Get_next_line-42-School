@@ -6,57 +6,65 @@
 /*   By: aelkhali <aelkhali@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 09:56:13 by aelkhali          #+#    #+#             */
-/*   Updated: 2022/11/03 13:14:18 by aelkhali         ###   ########.fr       */
+/*   Updated: 2022/11/04 13:29:00 by aelkhali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*ft_strchr(char *s, int c)
+char	*re_n_store(int fd)
 {
-	char	cas_c;
-	int		i;
+	char static	*save;
+	char		*buf;
+	int			i_read;
 
-	if (!s)
-		return (0);
-	i = 0;
-	cas_c = (char )c;
-	while (s[i] && s[i] != cas_c)
-		i++;
-	if (s[i] == '\0' && cas_c != s[i])
+	i_read = 1;
+	save = NULL;
+	buf = malloc(BUFFER_SIZE + 1);
+	if (!buf)
 		return (NULL);
-	return ((char *)&s[i]);
+	while (!ft_strchr(save, '\n') && i_read != 0)
+	{
+		i_read = (int )read(fd, buf, BUFFER_SIZE);
+		if (i_read == -1)
+		{
+			free(buf);
+			free(save);
+			return (NULL);
+		}
+		buf[i_read] = '\0';
+		save = ft_strjoin(save, buf);
+	}
+	free(buf);
+	return (save);
+}
+
+char	*extract_line(char *sv)
+{
+	char	*extracted_line;
+	char	*tmp;
+	size_t	line_len;
+
+	if (!ft_strchr(sv, '\n'))
+		return(sv);
+	line_len = ft_strlen(sv) - ft_strlen(ft_strchr(sv, '\n'));
+	extracted_line = malloc(line_len + 1);
+	if (!extracted_line)
+		return (NULL);
+	ft_strlcpy(extracted_line, sv, line_len + 1);
+	tmp = ft_substr(sv, line_len + 1, ft_strlen(ft_strchr(sv, '\n')));
+	free(sv);
+	sv = tmp;
+	free(tmp);
+	return (extracted_line);
 }
 
 char	*get_next_line(int fd)
 {
-	char 		*str_reader;
-	static char	*storage;
-	char		*line;
-	int			i;
-	int			i_readed;
+	char	*line;
 
-	str_reader = NULL;
-	line = NULL;
-	i_readed = 1;
-	storage = NULL;
-	i = 0;
-	if (fd < 0 || BUFFER_SIZE <= 0 || !read(fd, str_reader, BUFFER_SIZE))
+	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	str_reader = malloc(BUFFER_SIZE + 1);
-	if (!str_reader)
-		return (NULL);
-	while (i_readed >= 0 && !ft_strchr(storage, '\n'))
-	{
-		i_readed = read(fd, str_reader, BUFFER_SIZE);
-		str_reader[i_readed] = '\0';
-		storage = ft_strjoin(str_reader, storage);
-		if (!ft_strchr(str_reader, '\n'))
-			return(str_reader);
-	}
-	while (storage[i] && storage[i] != '\n')
-		i++;
-	line = ft_substr(storage, 0, i + 1);
-	storage = ft_substr(storage , i, ft_strlen(ft_strchr(storage,'\n')));
+	line = extract_line(re_n_store(fd));
 	return (line);
 }
