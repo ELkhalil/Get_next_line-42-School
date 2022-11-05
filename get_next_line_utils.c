@@ -6,7 +6,7 @@
 /*   By: aelkhali <aelkhali@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/03 07:44:24 by aelkhali          #+#    #+#             */
-/*   Updated: 2022/11/05 13:53:28 by aelkhali         ###   ########.fr       */
+/*   Updated: 2022/11/05 14:58:32 by aelkhali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,10 +85,8 @@ char	*ft_strjoin(char *s1, char *s2)
 
 char	*ft_substr(char *s, unsigned int start, size_t len)
 {
-	size_t		i;
 	char		*sub_str;
 
-	i = 0;
 	if (!s)
 		return (NULL);
 	if (start >= ft_strlen(s))
@@ -105,6 +103,5 @@ char	*ft_substr(char *s, unsigned int start, size_t len)
 	if (!sub_str)
 		return (NULL);
 	ft_strlcpy(sub_str, s + start, len + 1);
-	free(s);
 	return (sub_str);
 }
