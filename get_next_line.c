@@ -6,65 +6,76 @@
 /*   By: aelkhali <aelkhali@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 09:56:13 by aelkhali          #+#    #+#             */
-/*   Updated: 2022/11/04 14:21:38 by aelkhali         ###   ########.fr       */
+/*   Updated: 2022/11/05 13:58:22 by aelkhali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*re_n_store(int fd)
+static char	*re_n_store(int fd, char **sv)
 {
-	char static	*save;
-	char		*buf;
-	int			i_read;
+	int		i_readed;
+	char	*buf;
 
-	i_read = 1;
-	save = NULL;
-	buf = malloc(sizeof(char ) * BUFFER_SIZE + 1);
+	i_readed = 1;
+	buf = malloc (BUFFER_SIZE + 1);
 	if (!buf)
 		return (NULL);
-	while (i_read != 0 && !ft_strchr(save, '\n'))
+	while (i_readed != 0 && !ft_strchr(*sv, '\n'))
 	{
-		i_read = (int )read(fd, buf, BUFFER_SIZE);
-		if (i_read == -1)
+		i_readed = read(fd, buf, BUFFER_SIZE);
+		if (i_readed == -1)
 		{
 			free(buf);
-			free(save);
 			return (NULL);
 		}
-		buf[i_read] = '\0';
-		save = ft_strjoin(save, buf);
+		buf[i_readed] = '\0';
+		*sv = ft_strjoin(*sv, buf);
 	}
 	free(buf);
-	return (save);
+	return (*sv);
 }
 
-char	*extract_line(char *sv)
+static char	*line_extractor(char *str)
 {
-	char	*extracted_line;
-	char	*tmp;
-	size_t	line_len;
+	unsigned int	len;
+	char			*extracted_line;
 
-	if (!*sv)
-	{
-		free(sv);
+	if (!str)
 		return (NULL);
-	}
-	line_len = ft_strlen(sv) - ft_strlen(ft_strchr(sv, '\n'));
-	extracted_line = ft_substr(sv, 0, line_len + 1);
-	tmp = ft_substr(sv, line_len + 1, ft_strlen(ft_strchr(sv, '\n')));
-	free(sv);
-	sv = tmp;
-	free(tmp);
+	if (!ft_strchr(str, '\n'))
+		return (str);
+	len = ft_strlen(str) - ft_strlen(ft_strchr(str, '\n')) + 1;
+	extracted_line = ft_substr(str, 0, len);
 	return (extracted_line);
+}
+
+static char	*extract_mod(char *str)
+{
+	char			*mod_extract;
+	unsigned int	start;
+	size_t			len;
+
+	if (!ft_strchr(str, '\n'))
+		return (NULL);
+	len = ft_strlen(ft_strchr(str, '\n')) - 1;
+	start = ft_strlen(str) - ft_strlen(ft_strchr(str, '\n'));
+	mod_extract = ft_substr(str, start, len);
+	return (mod_extract);
 }
 
 char	*get_next_line(int fd)
 {
-	char	*line;
+	static char	*container;
+	char		*line;
+	char		*tmp;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	line = extract_line(re_n_store(fd));
+	container = re_n_store(fd, &container);
+	line = line_extractor(container);
+	tmp = extract_mod(container);
+	free(container);
+	container = tmp;
 	return (line);
 }

@@ -6,7 +6,7 @@
 /*   By: aelkhali <aelkhali@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 09:51:11 by aelkhali          #+#    #+#             */
-/*   Updated: 2022/11/04 14:10:27 by aelkhali         ###   ########.fr       */
+/*   Updated: 2022/11/05 13:32:34 by aelkhali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,15 +20,14 @@
 
 
 #ifndef BUFFER_SIZE
-# define BUFFER_SIZE 1
+# define BUFFER_SIZE 5
 #endif
 
 char	*get_next_line(int fd);
-char	*re_n_store(int fd);
-size_t   ft_strlen(char *s);
-char	*ft_strjoin(char  *s1, char  *s2);
-char	*ft_substr(char  *s, unsigned int start, size_t len);
-size_t	ft_strlcpy(char *dst,  char *src, size_t dstsize);
 char	*ft_strchr(char *s, int c);
+size_t	ft_strlen(char *s);
+size_t	ft_strlcpy(char *dst, char *src, size_t dstsize);
+char	*ft_strjoin(char *s1, char *s2);
+char	*ft_substr(char *s, unsigned int start, size_t len);
 
 #endif

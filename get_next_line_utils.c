@@ -6,38 +6,38 @@
 /*   By: aelkhali <aelkhali@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/03 07:44:24 by aelkhali          #+#    #+#             */
-/*   Updated: 2022/11/04 14:11:31 by aelkhali         ###   ########.fr       */
+/*   Updated: 2022/11/05 13:53:28 by aelkhali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-size_t	ft_strlen(char *s)
-{
-	size_t	len;
-
-	len = 0;
-	if (!s)
-		return (0);
-	while (*s++)
-		len++;
-	return (len);
-}
-
 char	*ft_strchr(char *s, int c)
 {
-	char	cas_c;
+	char	c_c;
 	int		i;
 
+	c_c = (char )c;
+	i = 0;
 	if (!s)
 		return (NULL);
-	i = 0;
-	cas_c = (char )c;
-	while (s[i] && s[i] != cas_c)
+	while (s[i] && s[i] != c_c)
 		i++;
-	if (s[i] == '\0' && cas_c != s[i])
+	if (s[i] == '\0' && s[i] != c)
 		return (NULL);
 	return ((char *)&s[i]);
+}
+
+size_t	ft_strlen(char *s)
+{
+	int	i;
+
+	if (!s)
+		return (0);
+	i = 0;
+	while (*s++)
+		i++;
+	return (i);
 }
 
 size_t	ft_strlcpy(char *dst, char *src, size_t dstsize)
@@ -56,32 +56,34 @@ size_t	ft_strlcpy(char *dst, char *src, size_t dstsize)
 
 char	*ft_strjoin(char *s1, char *s2)
 {
-	char	*new_str;
+	char	*new_sv;
 	char	*recall;
 	int		i;
 
 	i = 0;
 	if (!s1)
 	{
-		s1 = malloc (1);
-		s1[0] = 0;
+		s1 = malloc(1);
+		if (!s1)
+			return (NULL);
+		s1[0] = '\0';
 	}
 	if (!s2)
 		return (NULL);
-	new_str = malloc ((ft_strlen(s1) + ft_strlen(s2)) + 1);
-	if (!new_str)
+	new_sv = malloc (ft_strlen(s1) + ft_strlen(s2) + 1);
+	if (!new_sv)
 		return (NULL);
-	recall = new_str;
+	recall = new_sv;
 	while (s1[i])
-			*new_str++ = s1[i++];
+		*new_sv++ = s1[i++];
 	while (*s2)
-		*new_str++ = *s2++;
-	*new_str = '\0';
+		*new_sv++ = *s2++;
+	*new_sv = '\0';
 	free(s1);
 	return (recall);
 }
 
-char	*ft_substr(char  *s, unsigned int start, size_t len)
+char	*ft_substr(char *s, unsigned int start, size_t len)
 {
 	size_t		i;
 	char		*sub_str;
@@ -103,5 +105,6 @@ char	*ft_substr(char  *s, unsigned int start, size_t len)
 	if (!sub_str)
 		return (NULL);
 	ft_strlcpy(sub_str, s + start, len + 1);
+	free(s);
 	return (sub_str);
 }
